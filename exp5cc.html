@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        
+        .converter-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 350px;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        .result {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="converter-container">
+        <h1>Currency Converter</h1>
+        
+        <div class="form-group">
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" value="2">
+        </div>
+        
+        <div class="form-group">
+            <label for="from">From:</label>
+            <select id="from">
+                <option value="USD" selected>US Dollar (USD)</option>
+                <option value="EUR">Euro (EUR)</option>
+                <option value="GBP">British Pound (GBP)</option>
+                <option value="JPY">Japanese Yen (JPY)</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="to">To:</label>
+            <select id="to">
+                <option value="INR" selected>Indian Rupee (INR)</option>
+                <option value="USD">US Dollar (USD)</option>
+                <option value="EUR">Euro (EUR)</option>
+                <option value="GBP">British Pound (GBP)</option>
+            </select>
+        </div>
+        
+        <div class="result" id="result">
+            Converted Amount: 166.67 INR
+        </div>
+    </div>
+
+    <script>
+        // Exchange rates (simplified - in a real app you'd fetch these from an API)
+        const exchangeRates = {
+            USD: { INR: 83.33, EUR: 0.92, GBP: 0.79, JPY: 151.50, USD: 1 },
+            EUR: { USD: 1.09, INR: 90.90, GBP: 0.86, JPY: 165.20, EUR: 1 },
+            GBP: { USD: 1.27, EUR: 1.16, INR: 105.50, JPY: 191.80, GBP: 1 },
+            JPY: { USD: 0.0066, EUR: 0.0061, GBP: 0.0052, INR: 0.55, JPY: 1 },
+            INR: { USD: 0.012, EUR: 0.011, GBP: 0.0095, JPY: 1.82, INR: 1 }
+        };
+
+        // Get DOM elements
+        const amountInput = document.getElementById('amount');
+        const fromSelect = document.getElementById('from');
+        const toSelect = document.getElementById('to');
+        const resultDiv = document.getElementById('result');
+
+        // Function to convert currency
+        function convertCurrency() {
+            const amount = parseFloat(amountInput.value);
+            const fromCurrency = fromSelect.value;
+            const toCurrency = toSelect.value;
+            
+            if (isNaN(amount)) {
+                resultDiv.textContent = 'Please enter a valid amount';
+                return;
+            }
+            
+            // Get exchange rate
+            const rate = exchangeRates[fromCurrency][toCurrency];
+            const convertedAmount = (amount * rate).toFixed(2);
+            
+            // Update result
+            resultDiv.textContent = `Converted Amount: ${convertedAmount} ${toCurrency}`;
+        }
+
+        // Add event listeners
+        amountInput.addEventListener('input', convertCurrency);
+        fromSelect.addEventListener('change', convertCurrency);
+        toSelect.addEventListener('change', convertCurrency);
+
+        // Initial conversion
+        convertCurrency();
+    </script>
+</body>
+</html>
